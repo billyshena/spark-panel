@@ -1,0 +1,31 @@
+.panel-warning{
+  border-color:#D35400;
+}
+
+#main-wrapper{
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.panel-warning>.panel-heading{
+  background-color:#D35400;
+  border-color:#D35400;
+}
+
+h3.panel-title{
+  color:white;
+  font-weight:300;
+}
+div.decks ul li{
+  margin:15px 25px;
+  list-style-type: none;
+}
+div.decks ul li a{
+  display:block;
+  border-radius:5px;
+  border:1px solid #636363;
+  overflow:hidden;
+}
+
+div.decks ul li a img{
+
+}

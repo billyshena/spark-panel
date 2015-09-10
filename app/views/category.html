@@ -1,0 +1,55 @@
+<div class="container categories">
+<section class="panel panel-primary">
+
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      Category
+    </h3>
+
+  </div>
+
+  <div class="panel-body">
+    <form action="javascript:;" data-ng-submit="$event.preventDefault();create()">
+      <div class="form-group">
+        <label for="exampleInputEmail1">New category</label>
+        <input type="name"
+               class="form-control"
+               id="exampleInputEmail1"
+               data-ng-model="category.name">
+        <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
+      </div>
+    </form>
+  </div>
+
+
+  <h3>List (34)</h3>
+  <div style="padding:20px;">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <td>Nom</td>
+        <td>Created at</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr data-ng-repeat="category in categories | orderBy: '-createdAt'"
+          data-ng-mouseover="category.isHover = true;"
+          data-ng-mouseleave="category.isHover = false;">
+        <td>{{ category.name }}</td>
+        <td>
+          {{ category.createdAt | date: 'MM/dd/yyyy'}} at {{ category.createdAt | date: 'HH:mm:ss' }}
+          <a href="javascript:;"
+             class="pull-right"
+             data-ng-show="category.isHover"
+             data-ng-click="delete(category)">Supprimer</a>
+        </td>
+
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+
+</section>
+</div>
