@@ -4,14 +4,14 @@
 
     </div>
 
+
     <!-- List of decks -->
     <div class="decks">
         <ul>
-            <li data-ng-repeat="d in decks" class="pull-left">
-                <a href="/#/edit/{{ d.id }}">
-                    <img data-ng-src="{{ d.picture }}" alt="" width="250"/>
-                    <br />
-                    <h4>{{ d.name }}</h4>
+            <li data-ng-repeat="deck in decks" class="pull-left">
+                <a href="/#/edit/{{ deck.id }}">
+                    <img ng-src="{{ deck.picture }}" alt="" width="250" height="150"/>
+                    <p class="text-center" style="line-height:38px;margin-bottom:0;">{{ deck.name }}</p>
                 </a>
             </li>
         </ul>
