@@ -32,18 +32,9 @@
       </tr>
       </thead>
       <tbody>
-      <tr data-ng-repeat="category in categories | orderBy: '-createdAt'"
-          data-ng-mouseover="category.isHover = true;"
-          data-ng-mouseleave="category.isHover = false;">
+      <tr data-ng-repeat="category in categories | orderBy: '-createdAt'">
         <td>{{ category.name }}</td>
-        <td>
-          {{ category.createdAt | date: 'MM/dd/yyyy'}} at {{ category.createdAt | date: 'HH:mm:ss' }}
-          <a href="javascript:;"
-             class="pull-right"
-             data-ng-show="category.isHover"
-             data-ng-click="delete(category)">Supprimer</a>
-        </td>
-
+        <td>{{ category.createdAt | date: 'MM/dd/yyyy'}} at {{ category.createdAt | date: 'HH:mm:ss' }}</td>
       </tr>
       </tbody>
     </table>

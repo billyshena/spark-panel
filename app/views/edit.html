@@ -1,0 +1,104 @@
+<!-- New deck -->
+<div class="container">
+    <section class="panel panel-warning">
+
+        <div class="panel-heading">
+            <h3 class="panel-title">New deck</h3>
+        </div>
+
+
+        <div class="panel-body">
+            <form data-ng-submit="updateDeck()">
+
+                <!-- Deck properties -->
+                <h4>Deck informations</h4><br />
+
+                <div class="form-group">
+                    <label>Name</label>
+                    <input class="form-control" data-ng-model="deck.name" placeholder="Deck name">
+                </div>
+                <div class="form-group">
+                    <label>Description ({{ deck.description.length }} char.)</label>
+                    <textarea class="form-control" data-ng-model="deck.description" placeholder="Deck description">
+
+                    </textarea>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputFile">Cover picture</label>
+                    <input type="file" id="exampleInputFile">
+                </div>
+
+                <button class="btn btn-primary" type="submit">Update Deck Information</button>
+            </form>
+            <br /><br /><hr /><br />
+
+            <!-- Questions -->
+            <h4>Questions</h4><br />
+
+            <div data-ng-repeat="question in deck.questions">
+
+                <form data-ng-submit="updateQuestion($index)">
+
+                    <h5>Question {{ $index + 1 }} : {{ question.type.name }}
+
+                        <a class="btn btn-danger" style="float: right; margin-top: -10px" data-ng-click="removeQuestion($index)">
+                            Remove
+                        </a>
+
+                    </h5><br />
+
+
+                    <div class="form-group">
+                        <label for="newQuestion">Category</label><br />
+                        <select id="newQuestion" ng-options="category.id as category.name for category in categories"
+                        ng-model="question.category.id" class="form-control"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control" data-ng-model="question.title" placeholder="What's your favorite color?" />
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control" data-ng-model="question.subtitle" placeholder="Try to be funny here..." />
+                    </div>
+
+
+                    <!-- CHECKBOX or RADIO -->
+                    <div data-ng-if="question.type.name == 'CHECKBOX' || question.type.name == 'RADIO'" style="margin-left: 15%">
+
+                        <div data-ng-repeat="choice in question.choices" class="form-group" style="height: 35px">
+
+                            <input class="form-control" data-ng-model="choice.content" placeholder="Choice {{ $index + 1 }}" style="width: 80%; float:left" />
+                            <a href="javascript:;" class="btn btn-danger" data-ng-click="removeChoice(question, $index)" style="float:left; margin-left: 10px">
+                                x
+                            </a>
+                        </div>
+                        <a href="javascript:;" data-ng-click="addChoice(question)">
+                            + Add an choice
+                        </a>
+                    </div>
+
+                    <button data-ng-if="$index != questionToUpdate" class="btn btn-primary" style="margin-top: 35px; margin-right: 10px; margin-left: 15%;" type="submit">
+                        Update Question
+                    </button>
+
+                    <br />
+                    <br />
+                    <hr style="margin: 35px auto"/>
+
+                </form>
+
+            </div>
+
+
+            <!-- New question -->
+            <div class="form-group">
+                <label for="newQuestion">Add a new question</label><br />
+                <select id="newQuestion" ng-options="type as type.name for type in types"
+                ng-model="new.type" class="form-control" ng-change="addQuestion()"></select>
+            </div>
+
+
+        </div>
+    </section>
+</div>

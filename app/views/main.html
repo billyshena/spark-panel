@@ -1,18 +1,20 @@
 <div id="main-wrapper">
 
-  <div class="new-deck">
+    <div class="new-deck">
 
-  </div>
+    </div>
 
-  <!-- List of decks -->
-  <div class="decks">
-    <ul>
-      <li data-ng-repeat="i in [1,2,3,4,5,6]" class="pull-left">
-        <a href="javascript:;">
-          <img src="images/decks/{{ i }}.jpg" alt="" width="250"/>
-        </a>
-      </li>
-    </ul>
-  </div>
+    <!-- List of decks -->
+    <div class="decks">
+        <ul>
+            <li data-ng-repeat="d in decks" class="pull-left">
+                <a href="/#/edit/{{ d.id }}">
+                    <img data-ng-src="{{ d.picture }}" alt="" width="250"/>
+                    <br />
+                    <h4>{{ d.name }}</h4>
+                </a>
+            </li>
+        </ul>
+    </div>
 
 </div>

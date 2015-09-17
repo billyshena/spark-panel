@@ -1,31 +1,37 @@
 .panel-warning{
-  border-color:#D35400;
+    border-color:#D35400;
 }
 
 #main-wrapper{
-  max-width: 1000px;
-  margin: 0 auto;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 .panel-warning>.panel-heading{
-  background-color:#D35400;
-  border-color:#D35400;
+    background-color:#D35400;
+    border-color:#D35400;
 }
 
 h3.panel-title{
-  color:white;
-  font-weight:300;
+    color:white;
+    font-weight:300;
 }
 div.decks ul li{
-  margin:15px 25px;
-  list-style-type: none;
+    margin:15px 25px;
+    width: 255px;
+    list-style-type: none;
 }
 div.decks ul li a{
-  display:block;
-  border-radius:5px;
-  border:1px solid #636363;
-  overflow:hidden;
+    display:block;
+    border-radius:5px;
+    border:1px solid #636363;
+    overflow:hidden;
 }
 
-div.decks ul li a img{
+div.decks ul li h4 {
+    text-align: center;
+    margin: 15px auto;
+}
 
+div.decks ul li a img {
+    width: 100%;
 }

@@ -1,30 +1,30 @@
 'use strict';
 
 /**
- * @ngdoc function
- * @name panelApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of the panelApp
- */
+* @ngdoc function
+* @name panelApp.controller:MainCtrl
+* @description
+* # MainCtrl
+* Controller of the panelApp
+*/
 angular.module('panelApp')
-  .controller('MainCtrl', function ($scope, $http) {
-    console.log('MainCtrl');
+.controller('MainCtrl', function ($scope, $http) {
 
     $scope.decks = [];
 
     function loadDecks() {
 
-      $http
+        $http
         .get(config.appUrl + '/deck')
         .then(function(response) {
-          $scope.decks = response.data;
+            console.log('Decks', response.data)
+            $scope.decks = response.data;
         }, function(err) {
-          console.log('ok');
+            console.log(err);
         });
 
     }
 
     loadDecks();
 
-  });
+});

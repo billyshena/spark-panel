@@ -30,18 +30,6 @@ angular.module('panelApp')
 
     };
 
-
-    $scope.delete = function(category) {
-
-      $http
-        .delete(config.appUrl + '/category/' + category.id)
-        .then(function(data) {
-          return $scope.categories.splice($scope.categories.indexOf(data), 1);
-        }, function(err) {
-          return console.log(err);
-        });
-    };
-
     function loadCategories() {
 
       $http

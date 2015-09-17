@@ -14,6 +14,8 @@ angular.module('panelApp')
 
 
     $scope.types = [{
+            name: '-- Select a question type --'
+        }, {
             name: 'RADIO'
         }, {
             name: 'CHECKBOX'
@@ -33,9 +35,15 @@ angular.module('panelApp')
     }
 
     $scope.new = {
-        type: ''
+        type: $scope.types[0]
     }
 
+
+    $http
+        .get(config.appUrl + '/category')
+        .then(function(response) {
+            $scope.categories = response.data;
+        })
 
     $scope.addQuestion = function() {
         $scope.deck.questions.push({
@@ -50,6 +58,7 @@ angular.module('panelApp')
                     content: ''
                 }]
         })
+        $scope.new.type = $scope.types[0];
     }
 
     $scope.addChoice = function(question) {
@@ -83,11 +92,9 @@ angular.module('panelApp')
 
                 function createQuestion(i) {
 
-
-
                     function createAnswer(j) {
 
-                        if(j < $scope.deck.questions[i].choices.length) {
+                        if(j < $scope.deck.questions[i].choices.length && $scope.deck.questions[i].choices[j].content != '') {
                             $http
                                 .post(config.appUrl + '/choice', {
                                     content: $scope.deck.questions[i].choices[j].content,
@@ -112,6 +119,7 @@ angular.module('panelApp')
                             .post(config.appUrl + '/question', {
                                 title: $scope.deck.questions[i].title,
                                 subtitle: $scope.deck.questions[i].subtitle,
+                                category: $scope.deck.questions[i].category.id,
                                 number: i + 1,
                                 type: $scope.deck.questions[i].type.name,
                                 deck: deck.id
@@ -135,6 +143,8 @@ angular.module('panelApp')
 
 
                 createQuestion(0);
+
+                window.location.replace('/');
 
 
             }, function(err) {
