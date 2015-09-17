@@ -18,6 +18,7 @@ angular.module('panelApp')
       $http
         .get(config.appUrl + '/deck')
         .then(function(response) {
+          console.log('decks', response);
           $scope.decks = response.data;
         }, function(err) {
           console.log('ok');

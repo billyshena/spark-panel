@@ -26,12 +26,10 @@
             <div class="form-group">
                 <label for="exampleInputFile">Cover picture</label>
                 <input type="file"
-                       ngf-select
-                       ng-model="picFile"
-                       name="file"
-                       accept="image/*"
-                       ngf-max-size="2MB">
+                       nv-file-select
+                       uploader="uploader">
             </div>
+
 
             <br /><hr /><br />
 
@@ -86,7 +84,7 @@
 
 
 
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" class="btn btn-default" ng-disabled="disabled">Submit</button>
         </form>
     </div>
 

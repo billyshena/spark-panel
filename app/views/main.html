@@ -7,9 +7,10 @@
   <!-- List of decks -->
   <div class="decks">
     <ul>
-      <li data-ng-repeat="i in [1,2,3,4,5,6]" class="pull-left">
+      <li data-ng-repeat="deck in decks" class="pull-left">
         <a href="javascript:;">
-          <img src="images/decks/{{ i }}.jpg" alt="" width="250"/>
+          <img ng-src="{{ deck.picture }}" alt="" width="250" height="150"/>
+          <p class="text-center" style="line-height:38px;margin-bottom:0;">{{ deck.name }}</p>
         </a>
       </li>
     </ul>
