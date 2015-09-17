@@ -8,7 +8,7 @@
 
 
     <div class="panel-body">
-        <form data-ng-submit="createDeck()">
+        <form data-ng-submit="createDeck(picFile)">
 
             <!-- Deck properties -->
             <h4>Deck informations</h4><br />
@@ -25,7 +25,12 @@
             </div>
             <div class="form-group">
                 <label for="exampleInputFile">Cover picture</label>
-                <input type="file" id="exampleInputFile">
+                <input type="file"
+                       ngf-select
+                       ng-model="picFile"
+                       name="file"
+                       accept="image/*"
+                       ngf-max-size="2MB">
             </div>
 
             <br /><hr /><br />
@@ -42,11 +47,11 @@
                 </h5><br />
 
                 <div class="form-group">
-                    <input class="form-control" data-ng-model="question.title" placeholder="What's your favorite color?" />
+                    <input class="form-control" data-ng-model="question.title" placeholder="Question" />
                 </div>
 
                 <div class="form-group">
-                    <input class="form-control" data-ng-model="question.subtitle" placeholder="Try to be funny here..." />
+                    <input class="form-control" data-ng-model="question.subtitle" placeholder="Sub-text" />
                 </div>
 
 

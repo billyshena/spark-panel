@@ -3,5 +3,6 @@
  */
 var config = {
   //appUrl: 'http://localhost:1337',
-  appUrl: 'http://localhost:1337'
+  appUrl: 'https://backend-spark.scalingo.io',
+  assetsUrl: 'spark-panel.s3-website-us-east-1.amazonaws.com'
 };

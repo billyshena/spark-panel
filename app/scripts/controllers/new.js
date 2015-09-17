@@ -8,9 +8,9 @@
  * Controller of the panelApp
  */
 angular.module('panelApp')
-  .controller('NewCtrl', function ($scope, $http) {
+  .controller('NewCtrl', function ($scope, $http, Upload, $timeout) {
 
-    console.log('NewCtrl');
+    console.log('NewCtrl', Upload);
 
 
     $scope.types = [{
@@ -67,8 +67,47 @@ angular.module('panelApp')
     }
 
 
-    $scope.createDeck = function() {
+    $scope.createDeck = function(file) {
         console.log($scope.deck)
+
+      console.log('create Deck file', file);
+      file.upload = Upload.upload({
+        url: 'http://spark-panel.s3-website-us-east-1.amazonaws.com/',
+        method: 'POST',
+        headers: {
+          'my-header': 'my-header-value'
+        },
+        fields: {
+          key: file.name, // the key to store the file on S3, could be file name or customized
+          AWSAccessKeyId: config.assetsUrl,
+          acl: 'public-read', // sets the access to the uploaded file in the bucket: private or public
+          policy: $scope.policy, // base64-encoded json policy (see article below)
+          signature: $scope.signature, // base64-encoded signature based on policy string (see article below)
+          "Content-Type": file.type != '' ? file.type : 'application/octet-stream', // content type of the file (NotEmpty)
+          filename: file.name // this is needed for Flash polyfill IE8-9
+        },
+        file: file,
+        fileFormDataName: 'myFile'
+      });
+
+
+      file.upload.then(function (response) {
+        console.log('upload then', response);
+        $timeout(function () {
+          file.result = response.data;
+        });
+      }, function (response) {
+        if (response.status > 0)
+          $scope.errorMsg = response.status + ': ' + response.data;
+      });
+
+
+      file.upload.progress(function (evt) {
+        console.log('progressing');
+        // Math.min is to fix IE which reports 200% sometimes
+        file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+      });
+
 
         // Deck object first
         $http
@@ -77,6 +116,7 @@ angular.module('panelApp')
                 description: $scope.deck.description
             })
             .then(function(response) {
+
 
                 var deck = response.data;
                 var question;
