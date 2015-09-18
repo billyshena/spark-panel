@@ -42,10 +42,14 @@ angular.module('panelApp')
 
     uploader.onCompleteItem = function(fileItem){
         // Deck object first
+
+
+      console.log('fileItem', fileItem);
         $http
         .post(config.appUrl + '/deck', {
             name: $scope.deck.name,
-            description: $scope.deck.description
+            description: $scope.deck.description,
+            picture: config.assetsUrl + '/' + fileItem.keyName
         })
         .then(function(response) {
 
@@ -106,7 +110,7 @@ angular.module('panelApp')
 
             createQuestion(0);
 
-            window.location.replace('/');
+/*            window.location.replace('/');*/
 
 
         }, function(err) {
