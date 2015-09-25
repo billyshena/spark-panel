@@ -11,7 +11,13 @@
             <li data-ng-repeat="deck in decks" class="pull-left">
                 <a href="/#/edit/{{ deck.id }}">
                     <img ng-src="{{ deck.picture }}" alt="" width="250" height="150"/>
-                    <p class="text-center" style="line-height:38px;margin-bottom:0;">{{ deck.name }}</p>
+                    <p class="text-center" style="line-height:38px;margin: 0px 20px;">
+                      <span class="pull-left">{{ deck.name }}</span>
+                      &nbsp;
+                      <span class="pull-right" style="color:#C73232;" data-ng-click="$event.preventDefault();$event.stopPropagation();delete(deck);">
+                        delete
+                      </span>
+                    </p>
                 </a>
             </li>
         </ul>

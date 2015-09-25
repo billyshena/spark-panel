@@ -115,7 +115,7 @@ angular.module('panelApp')
 
             createQuestion(0);
 
-/*            window.location.replace('/');*/
+            window.location.replace('/');
 
 
         }, function(err) {
