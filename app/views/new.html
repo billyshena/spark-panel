@@ -31,7 +31,15 @@
             </div>
 
 
-            <br /><hr /><br />
+            <div class="form-group">
+              <label for="exampleInputFile">Premium option</label>
+              <input type="checkbox" data-ng-model="checked"/>
+              <input type="number" class="form-control" data-ng-model="points" data-ng-show="checked" placeholder="Number of points to unlock it"/>
+            </div>
+
+
+
+          <br /><hr /><br />
 
             <!-- Questions -->
             <h4>Questions</h4><br />
@@ -90,8 +98,8 @@
             </div>
 
 
-
-            <button type="submit" class="btn btn-default" ng-disabled="disabled">Submit</button>
+          <br/>
+            <button type="submit" class="btn btn-success" ng-disabled="disabled" style="width:100%;padding:8px 0px;">Create deck</button>
         </form>
     </div>
 

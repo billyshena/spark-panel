@@ -12,6 +12,7 @@ angular.module('panelApp')
 
 
     $scope.disabled = false;
+    $scope.points = null;
     $scope.item = {};
     $scope.types = [{
         name: '-- Select a question type --'
@@ -42,10 +43,18 @@ angular.module('panelApp')
 
     uploader.onCompleteItem = function(fileItem){
         // Deck object first
+
+
+      console.log('fileItem', fileItem);
+      console.log('premium', $scope.checked);
+      console.log('points', $scope.points);
         $http
         .post(config.appUrl + '/deck', {
             name: $scope.deck.name,
-            description: $scope.deck.description
+            description: $scope.deck.description,
+            picture: config.assetsUrl + '/' + fileItem.keyName,
+            premium: $scope.checked,
+            points: $scope.points
         })
         .then(function(response) {
 
@@ -172,6 +181,11 @@ angular.module('panelApp')
 
         var file = $scope.item.file;
         $scope.disabled = true;
+
+        if(!file || !file.name) {
+          $scope.disabled = false;
+          return alert('Please attach an image to the deck');
+        }
 
         $http
         .post(config.appUrl + '/deck/upload', {
