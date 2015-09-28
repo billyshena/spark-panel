@@ -37,6 +37,7 @@ angular.module('panelApp')
         .then(function(response) {
 
           $scope.categories = response.data;
+          console.log($scope.categories)
 
         }, function(err) {
           return console.log(err);

@@ -1,17 +1,23 @@
 <!-- New deck -->
 <div class="container">
-    <section class="panel panel-warning">
+    <section class="panel panel-primary">
 
         <div class="panel-heading">
             <h3 class="panel-title">New deck</h3>
         </div>
 
 
-        <div class="panel-body">
+        <div class="panel-body" style="position: relative">
+
+            <button class="btn btn-danger" data-ng-click="deleteDeck()" style="position: absolute; top: 15px; right: 10px">Delete the deck</button>
+
+
             <form data-ng-submit="updateDeck()">
 
                 <!-- Deck properties -->
-                <h4>Deck informations</h4><br />
+                <h4>Deck informations</h4>
+
+                <br />
 
                 <div class="form-group">
                     <label>Name</label>
@@ -35,11 +41,11 @@
             <!-- Questions -->
             <h4>Questions</h4><br />
 
-            <div data-ng-repeat="question in deck.questions">
+            <div data-ng-repeat="question in deck.questions | orderBy: 'number'">
 
                 <form data-ng-submit="updateQuestion($index)">
 
-                    <h5>Question {{ $index + 1 }} : {{ question.type.name }}
+                    <h5>Question {{ question.number || ($index + 1)}} : {{ question.type.name }}
 
                         <a class="btn btn-danger" style="float: right; margin-top: -10px" data-ng-click="removeQuestion($index)">
                             Remove
@@ -47,6 +53,10 @@
 
                     </h5><br />
 
+                    <div class="form-group">
+                        <label>Position</label><br />
+                        <input class="form-control" type="number" data-ng-model="question.number" value="{{ $index + 1 }}" />
+                    </div>
 
                     <div class="form-group">
                         <label for="newQuestion">Category</label><br />

@@ -8,7 +8,7 @@
 * Controller of the panelApp
 */
 angular.module('panelApp')
-.controller('EditCtrl', function ($scope, $http, $route) {
+.controller('EditCtrl', function ($scope, $http, $route, $location) {
 
     $scope.questionToUpdate = null;
 
@@ -18,30 +18,19 @@ angular.module('panelApp')
         $scope.deck = response.data;
 
 
-        function loadChoices(i) {
+        $http
+        .get(config.appUrl + '/question?where={"deck":' + $scope.deck.id + '}&sort=number')
+        .then(function(response) {
+            $scope.deck.questions = response.data;
 
-            if(i < $scope.deck.questions.length && ($scope.deck.questions[i].type == 'CHECKBOX' ||  $scope.deck.questions[i].type == 'RADIO')) {
-
-                $http
-                .get(config.appUrl + '/question/' + $scope.deck.questions[i].id)
-                .then(function(response) {
-
-                    console.log(response.data)
-                    $scope.deck.questions[i] = response.data;
-                    $scope.deck.questions[i].type = {
-                        name: $scope.deck.questions[i].type
-                    }
-                    loadChoices(i + 1);
-                })
-            }
-            else if(i < $scope.deck.questions.length) {
+            for(var i=0; i<$scope.deck.questions.length; i++) {
                 $scope.deck.questions[i].type = {
                     name: $scope.deck.questions[i].type
                 }
             }
-        }
-
-        loadChoices(0);
+        }, function(err) {
+            console.log(err);
+        })
     }, function(err) {
         console.log(err);
     })
@@ -62,14 +51,27 @@ angular.module('panelApp')
     }];
 
     $http
-    .get(config.appUrl + '/category')
-    .then(function(response) {
-        $scope.categories = response.data;
-    })
+        .get(config.appUrl + '/category')
+        .then(function(response) {
+            $scope.categories = response.data;
+        })
 
     $scope.new = {
         type: $scope.types[0]
     }
+
+    $scope.deleteDeck = function() {
+        if (confirm('Are you sure you want to remove the deck?')) {
+            // Save it!
+            $http
+                .delete(config.appUrl + '/deck/' + $scope.deck.id)
+                .then(function() {
+                    return $location.path('/')
+                }, function(err) {
+                    console.log(err);
+                })
+        }
+    };
 
 
     $scope.addQuestion = function() {
@@ -119,11 +121,15 @@ angular.module('panelApp')
             return $scope.createQuestion(index);
         }
 
+        console.log($scope.deck.questions)
+        console.log('Index', index, question)
+
         $http
         .put(config.appUrl + '/question/' + question.id, {
             title: question.title,
             subtitle: question.subtitle,
             category: question.category.id,
+            number: question.number,
             type: $scope.deck.questions[index].type.name
         })
         .then(function(response) {
