@@ -30,6 +30,21 @@ angular.module('panelApp')
 
     };
 
+    $scope.deleteCategory = function(category) {
+        if (confirm('Are you sure you want to remove this category?')) {
+            // Save it!
+            $http
+                .delete(config.appUrl + '/category/' + category.id)
+                .then(function() {
+
+                    $scope.categories.splice($scope.categories.indexOf(category), 1);
+
+                }, function(err) {
+                    console.log(err);
+                })
+        }
+    };
+
     function loadCategories() {
 
       $http

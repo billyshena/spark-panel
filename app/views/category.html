@@ -27,14 +27,16 @@
     <table class="table table-striped">
       <thead>
       <tr>
-        <td>Nom</td>
+        <td>Name</td>
         <td>Created at</td>
+        <td>Actions</td>
       </tr>
       </thead>
       <tbody>
       <tr data-ng-repeat="category in categories | orderBy: '-createdAt'">
         <td>{{ category.name }}</td>
         <td>{{ category.createdAt | date: 'MM/dd/yyyy'}} at {{ category.createdAt | date: 'HH:mm:ss' }}</td>
+        <td><button class="btn btn-danger" data-ng-click="deleteCategory(category)">Remove</button></td>
       </tr>
       </tbody>
     </table>
