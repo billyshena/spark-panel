@@ -41,7 +41,7 @@
             <!-- Questions -->
             <h4>Questions</h4><br />
 
-            <div data-ng-repeat="question in deck.questions | orderBy: 'number'">
+            <div data-ng-repeat="question in deck.questions | orderBy: 'number'" class="question">
 
                 <form data-ng-submit="updateQuestion($index)">
 
@@ -88,13 +88,12 @@
                         </a>
                     </div>
 
-                    <button data-ng-if="$index != questionToUpdate" class="btn btn-primary" style="margin-top: 35px; margin-right: 10px; margin-left: 15%;" type="submit">
+                    <button data-ng-if="$index != questionToUpdate" class="btn btn-primary btn-edit" type="submit">
                         Update Question
                     </button>
 
                     <br />
-                    <br />
-                    <hr style="margin: 35px auto"/>
+                    <hr style="margin-bottom: 50px; border-top: 1px solid #337ab7"/>
 
                 </form>
 
