@@ -91,6 +91,7 @@ angular.module('panelApp')
                         title: $scope.deck.questions[i].title,
                         subtitle: $scope.deck.questions[i].subtitle,
                         category: $scope.deck.questions[i].category.id,
+                        points: $scope.deck.questions[i].points,
                         number: i + 1,
                         type: $scope.deck.questions[i].type.name,
                         deck: deck.id

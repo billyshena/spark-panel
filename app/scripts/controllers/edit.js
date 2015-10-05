@@ -128,6 +128,7 @@ angular.module('panelApp')
         .put(config.appUrl + '/question/' + question.id, {
             title: question.title,
             subtitle: question.subtitle,
+            points: question.points,
             category: question.category.id,
             number: question.number,
             type: $scope.deck.questions[index].type.name
@@ -201,6 +202,7 @@ angular.module('panelApp')
             title: $scope.deck.questions[i].title,
             subtitle: $scope.deck.questions[i].subtitle,
             category: $scope.deck.questions[i].category.id,
+            points: $scope.deck.questions[i].points,
             number: i + 1,
             type: $scope.deck.questions[i].type.name,
             deck: $scope.deck.id
