@@ -8,9 +8,10 @@
 * Controller of the panelApp
 */
 angular.module('panelApp')
-.controller('EditCtrl', function ($scope, $http, $route, $location) {
+.controller('EditCtrl', function ($scope, $http, $route, $location, FileUploader) {
 
     $scope.questionToUpdate = null;
+    $scope.saving = false;
 
     $http
     .get(config.appUrl + '/deck/' + $route.current.params.id)
@@ -28,6 +29,8 @@ angular.module('panelApp')
                     name: $scope.deck.questions[i].type
                 }
             }
+
+            console.log($scope.deck.questions)
         }, function(err) {
             console.log(err);
         })
@@ -75,18 +78,27 @@ angular.module('panelApp')
 
 
     $scope.addQuestion = function() {
-        $scope.deck.questions.push({
+
+        var question = {
             type: $scope.new.type,
             title: '',
             subtitle: '',
             choices: [{
-                content: ''
+                content: '',
+                picture: ''
             }, {
-                content: ''
-            }, {
-                content: ''
+                content: '',
+                picture: ''
             }]
-        });
+        };
+
+        if(question.type.name == 'RADIO' || question.type.name == 'CHECKBOX') {
+            question.choices.push({
+                content: ''
+            });
+        }
+
+        $scope.deck.questions.push(question);
         $scope.new.type = $scope.types[0];
     }
 
@@ -171,6 +183,34 @@ angular.module('panelApp')
                     console.log(err);
                 })
             }
+            else if(question.type.name == 'DUO') {
+                console.log('updating duo question')
+
+                function updateDuoQuestion(i, cb) {
+                    if(i < 2) {
+                        $http
+                            .put(config.appUrl + '/choice/' + question.choices[i].id, {
+                                content: question.choices[i].content,
+                                picture: question.choices[i].picture
+                            })
+                            .then(function(response) {
+                                console.log('Choice one updated', response);
+                                updateDuoQuestion(i + 1, cb);
+                            }, function(err) {
+                                console.log(err);
+                                updateDuoQuestion(i + 1, cb);
+                            })
+                    }
+                    else {
+                        cb();
+                    }
+                }
+
+                updateDuoQuestion(0, function() {
+                    console.log('question updated');
+                    $scope.questionToUpdate = null;
+                })
+            }
             else {
                 console.log('question updated');
                 $scope.questionToUpdate = null;
@@ -180,14 +220,18 @@ angular.module('panelApp')
 
 
     $scope.updateDeck = function() {
+        $scope.saving = true;
+
         console.log('changing...' + $scope.deck.id)
         $http
         .put(config.appUrl + '/deck/' + $scope.deck.id, {
             name: $scope.deck.name,
-            description: $scope.deck.description
+            description: $scope.deck.description,
+            points: $scope.deck.points
             // TODO: add picture here
         })
         .then(function(response) {
+            $scope.saving = false;
             console.log('UPDATED')
             console.log(response)
         }, function(err) {
@@ -214,11 +258,14 @@ angular.module('panelApp')
 
             function createAnswer(j) {
 
-                if(j < $scope.deck.questions[i].choices.length && $scope.deck.questions[i].choices[j].content != '') {
+                console.log('Question', $scope.deck.questions[i]);
+
+                if(j < $scope.deck.questions[i].choices.length && ($scope.deck.questions[i].type.name == 'DUO' || $scope.deck.questions[i].choices[j].content != '')) {
                     $http
                     .post(config.appUrl + '/choice', {
                         content: $scope.deck.questions[i].choices[j].content,
-                        question: response.data.id
+                        question: response.data.id,
+                        picture: $scope.deck.questions[i].choices[j].picture
                     })
                     .then(function(response) {
                         console.log('Choice', response.data);
@@ -237,4 +284,41 @@ angular.module('panelApp')
 
         });
     }
+
+
+    // FileUPLOADER FOR DUO QUESTION
+    var duoUploader = $scope.duoUploader = new FileUploader({
+        method: 'PUT',
+        queueLimit: 1
+    });
+
+    duoUploader.onErrorItem = function(item, response, status, headers){
+        console.log(response);
+    };
+
+    duoUploader.onAfterAddingFile = function(fileItem){
+        console.log('adding file', fileItem);
+
+        $http
+            .post(config.appUrl + '/choice/upload', {
+                extension: fileItem.file.name.split('.').pop()
+            })
+            .then(function(response) {
+                console.log(response);
+                fileItem.url = response.data.signedUrl;
+                fileItem.keyName = response.data.keyName;
+                fileItem.headers = {
+                    'Content-Type': fileItem.file.type != '' ? fileItem.file.type : 'application/octet-stream'
+                };
+                fileItem.upload();
+            });
+
+    };
+
+    duoUploader.onCompleteItem = function(fileItem){
+        fileItem.choice.picture = config.assetsUrl + '/' + fileItem.keyName;
+        fileItem.remove();
+
+        console.log('Completed',fileItem.choice);
+    };
 });
