@@ -10,12 +10,19 @@
         <ul>
             <li data-ng-repeat="deck in decks" class="pull-left">
                 <a href="/#/edit/{{ deck.id }}">
-                    <img ng-src="{{ deck.picture }}" alt="" width="250" height="150"/>
+                    <img ng-src="{{ deck.picture }}" alt="" width="250" height="150" data-ng-class="{'disabled-deck' : !deck.active }"/>
                     <p class="text-center" style="line-height:38px;margin: 0px 20px;">
-                      <span class="pull-left">{{ deck.name }}</span>
+                      <span class="pull-left" style="color:#555;">{{ deck.name }}</span>
                       &nbsp;
-                      <span class="pull-right" style="color:#C73232;" data-ng-click="$event.preventDefault();$event.stopPropagation();delete(deck);">
-                        delete
+                      <span class="pull-right" style="color:#C73232;margin-left:6px;" data-ng-click="$event.preventDefault();$event.stopPropagation();delete(deck);">
+                        Delete
+                      </span>
+
+                      <span class="pull-right" data-ng-click="$event.preventDefault();$event.stopPropagation();disable(deck)" data-ng-show="deck.active">
+                        Disable
+                      </span>
+                      <span class="pull-right" data-ng-click="$event.preventDefault();$event.stopPropagation();disable(deck)" data-ng-show="!deck.active">
+                        Enable
                       </span>
                     </p>
                 </a>

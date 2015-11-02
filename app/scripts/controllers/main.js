@@ -8,7 +8,7 @@
 * Controller of the panelApp
 */
 angular.module('panelApp')
-.controller('MainCtrl', function ($scope, $http) {
+.controller('MainCtrl', function ($scope, $http, Logger) {
 
     $scope.decks = [];
 
@@ -51,6 +51,23 @@ angular.module('panelApp')
             return console.log(err);
           });
       }
+    };
+
+
+    $scope.disable = function(deck) {
+
+      var active = deck.active ? false : true;
+      var responseTxt = deck.active ? "Deck "+deck.name + " is disabled " : "Deck " + deck.name + " is enabled";
+      deck.active = active;
+
+      $http.put(config.appUrl + '/deck/' + deck.id, {
+        active: active
+      }).then(function(response) {
+        Logger.logSuccess(responseTxt);
+      }, function(err) {
+        return console.log(err);
+      })
+
     };
 
     loadDecks();
