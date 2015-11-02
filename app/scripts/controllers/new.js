@@ -29,12 +29,12 @@ angular.module('panelApp')
     }];
 
 
-    // FileUploader
+    // FileUploader for DECK PICTURE
+
     var uploader = $scope.uploader = new FileUploader({
         method: 'PUT',
         queueLimit: 1
     });
-
 
     uploader.onAfterAddingFile = function(fileItem){
         console.log('adding file', fileItem);
@@ -45,16 +45,15 @@ angular.module('panelApp')
         // Deck object first
 
 
-      console.log('fileItem', fileItem);
-      console.log('premium', $scope.checked);
-      console.log('points', $scope.points);
+        console.log('fileItem', fileItem);
+        console.log('premium', $scope.checked);
+        console.log('points', $scope.points);
         $http
         .post(config.appUrl + '/deck', {
             name: $scope.deck.name,
             description: $scope.deck.description,
             picture: config.assetsUrl + '/' + fileItem.keyName,
-            premium: $scope.checked,
-            points: $scope.points
+            points: $scope.deck.points
         })
         .then(function(response) {
 
@@ -65,10 +64,11 @@ angular.module('panelApp')
 
                 function createAnswer(j) {
 
-                    if(j < $scope.deck.questions[i].choices.length && $scope.deck.questions[i].choices[j].content != '') {
+                    if(j < $scope.deck.questions[i].choices.length && ($scope.deck.questions[i].type.name == 'DUO' || $scope.deck.questions[i].choices[j].content != '')) {
                         $http
                         .post(config.appUrl + '/choice', {
                             content: $scope.deck.questions[i].choices[j].content,
+                            picture: $scope.deck.questions[i].choices[j].picture,
                             question: question.id
                         })
                         .then(function(response) {
@@ -91,6 +91,7 @@ angular.module('panelApp')
                         title: $scope.deck.questions[i].title,
                         subtitle: $scope.deck.questions[i].subtitle,
                         category: $scope.deck.questions[i].category.id,
+                        points: $scope.deck.questions[i].points,
                         number: i + 1,
                         type: $scope.deck.questions[i].type.name,
                         deck: deck.id
@@ -99,7 +100,7 @@ angular.module('panelApp')
                         console.log('Question: ', response.data)
                         question = response.data;
 
-                        if($scope.deck.questions[i].type.name == 'RADIO' || $scope.deck.questions[i].type.name == 'CHECKBOX') {
+                        if($scope.deck.questions[i].type.name == 'RADIO' || $scope.deck.questions[i].type.name == 'CHECKBOX' || $scope.deck.questions[i].type.name == 'DUO') {
                             createAnswer(0);
                         }
                         else {
@@ -110,12 +111,13 @@ angular.module('panelApp')
                         createQuestion(i + 1);
                     })
                 }
+                else {
+                    window.location.replace('/');
+                }
             }
 
 
             createQuestion(0);
-
-            window.location.replace('/');
 
 
         }, function(err) {
@@ -123,10 +125,50 @@ angular.module('panelApp')
         })
     };
 
-
     uploader.onErrorItem = function(item, response, status, headers){
         console.log(response);
     };
+
+
+
+    // FileUPLOADER FOR DUO QUESTION
+    var duoUploader = $scope.duoUploader = new FileUploader({
+        method: 'PUT',
+        queueLimit: 1
+    });
+
+    duoUploader.onErrorItem = function(item, response, status, headers){
+        console.log(response);
+    };
+
+    duoUploader.onAfterAddingFile = function(fileItem){
+        console.log('adding file', fileItem);
+
+        $http
+        .post(config.appUrl + '/choice/upload', {
+            extension: fileItem.file.name.split('.').pop()
+        })
+        .then(function(response) {
+            console.log(response);
+            fileItem.url = response.data.signedUrl;
+            fileItem.keyName = response.data.keyName;
+            fileItem.headers = {
+                'Content-Type': fileItem.file.type != '' ? fileItem.file.type : 'application/octet-stream'
+            };
+            fileItem.upload();
+        });
+
+    };
+
+    duoUploader.onCompleteItem = function(fileItem){
+        fileItem.choice.picture = config.assetsUrl + '/' + fileItem.keyName;
+        fileItem.remove();
+
+        console.log('Completed',fileItem.choice);
+    };
+
+
+
 
 
     $scope.deck = {
@@ -147,18 +189,28 @@ angular.module('panelApp')
     })
 
     $scope.addQuestion = function() {
-        $scope.deck.questions.push({
+
+        var question = {
             type: $scope.new.type,
             title: '',
             subtitle: '',
             choices: [{
-                content: ''
+                content: '',
+                picture: ''
             }, {
-                content: ''
-            }, {
-                content: ''
+                content: '',
+                picture: ''
             }]
-        })
+        };
+
+        if(question.type.name == 'RADIO' || question.type.name == 'CHECKBOX') {
+            question.choices.push({
+                content: ''
+            });
+        }
+
+        $scope.deck.questions.push(question);
+
         $scope.new.type = $scope.types[0];
     }
 
@@ -183,8 +235,8 @@ angular.module('panelApp')
         $scope.disabled = true;
 
         if(!file || !file.name) {
-          $scope.disabled = false;
-          return alert('Please attach an image to the deck');
+            $scope.disabled = false;
+            return alert('Please attach an image to the deck');
         }
 
         $http

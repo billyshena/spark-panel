@@ -35,3 +35,25 @@ div.decks ul li h4 {
 div.decks ul li a img {
     width: 100%;
 }
+
+div.question {
+    position: relative;
+
+    .btn-edit {
+        position: absolute;
+        right: -175px;
+        top: 139px;
+        height: 45px;
+    }
+}
+
+div.duo .img {
+    height: 230px;
+    max-width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+div.duo img {
+    max-width: 100%;
+}
